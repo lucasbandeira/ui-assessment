@@ -4,7 +4,18 @@ import { faUpload, faPercent } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 export const AccountOverview = ({data}) => {
-  console.log(data);
+  
+  const percentage = (partial, total) => {
+    if(partial === 0 || isNaN(partial) || total === 0 || isNaN(total)) 
+      return 0;
+    
+    return (100 * partial)/total;
+  };
+  
+  const {supportContact, salesOverview} = data;
+  
+  const percentageUpdate = percentage(salesOverview.successfulUploads, salesOverview.uploads);
+  const percentageLines = percentage(salesOverview.linesSaved, salesOverview.linesAttempted);
 
   const Navigation = styled.div`
     position: absolute;
@@ -74,9 +85,7 @@ export const AccountOverview = ({data}) => {
     &:hover {
       opacity: 0.6;
     }   
-  `
-
-   
+  `   
 
   const DetailsNav = styled.div`
     display: flex;
@@ -101,17 +110,22 @@ export const AccountOverview = ({data}) => {
     font-family: Roboto;
     font-size: 13px;
   `
-  const UploadPercent = styled.div`
+  const PercentDiv = styled.div`
     display: flex;
     flex-direction: flex
     align-content: flex-start;
     
-
-    width: calc(50% - 10px);
+    width: calc(45% - 10px);
     background-color: rgb(255, 255, 255);
     margin: 0 15px 20px 0;
     padding: 10px;
     border: 1px solid #000;
+  `
+
+  const PercentageNum = styled.div`
+    margin: 0 3px 0 0;
+    color: #63E6BE;
+    font-size: 30px;
   `
 
   return (
@@ -122,10 +136,10 @@ export const AccountOverview = ({data}) => {
           <SupportDiv>
 
             <ColumnNav>
-              <SupportContactName>{data.supportContact.name}</SupportContactName>
+              <SupportContactName>{supportContact.name}</SupportContactName>
               <EmailTelDiv>
-                <SupportContactEmail>{data.supportContact.email}</SupportContactEmail>
-                <SupportContactTel>&nbsp; &nbsp; {data.supportContact.tel}</SupportContactTel>
+                <SupportContactEmail>{supportContact.email}</SupportContactEmail>
+                <SupportContactTel>&nbsp; &nbsp; {supportContact.phone}</SupportContactTel>
               </EmailTelDiv>
             </ColumnNav>  
           </SupportDiv>
@@ -137,10 +151,20 @@ export const AccountOverview = ({data}) => {
               <SalesOverviewerDesc>You had <b>{data.salesOverview.uploads} uoloads </b> and <b>{data.salesOverview.linesSaved}</b> lines added</SalesOverviewerDesc>
             </ColumnNav>
           </DetailsNav>
-          <UploadPercent>
-            {data.salesOverview.successfulUploads}
+
+          <PercentDiv>
+            <PercentageNum>
+              {percentageUpdate}
+            </PercentageNum>
             <FontAwesomeIcon icon={faPercent} size="2x" style={{color: "#63E6BE",}} />
-          </UploadPercent>
+          </PercentDiv>
+
+          <PercentDiv>
+            <PercentageNum>
+              {percentageLines}
+            </PercentageNum>
+            <FontAwesomeIcon icon={faPercent} size="2x" style={{color: "#63E6BE",}} />
+          </PercentDiv>
       </Navigation>
   )
 }

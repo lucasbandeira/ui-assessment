@@ -6,7 +6,7 @@ function App() {
     supportContact: {
       name: 'John Smith',
       email: 'john.smith@feefo.com',
-      tel: '020 3362 4208'
+      phone: '020 3362 4208'
     },
     salesOverview: {
       uploads: 8,
